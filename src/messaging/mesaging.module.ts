@@ -9,8 +9,8 @@ export class AmqpModule {
       module: AmqpModule,
       providers: [
         {
-          provide: 'AMQP_CONFIG',
-          useValue: amqpConfig,
+          provide: 'AMQP_EXCHANGES',
+          useValue: amqpConfig.exchanges,
         },
         AmqpService,
       ],

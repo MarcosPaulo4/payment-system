@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Status, Transaction } from '../../../generated/prisma';
+import { Transaction, TransactionStatus } from '../../../generated/prisma';
 import { PrismaService } from '../../database/prisma.service';
 import { CreateTransactionDTO } from './dto/create-transaction.dto';
 import { TransactionPub } from './publishers/transaction.publisher';
@@ -17,7 +17,7 @@ export class TransactionService {
     const transaction = await this.prismaService.transaction.create({
       data: {
         ...createTransactionDto,
-        status: Status.CREATED,
+        status: TransactionStatus.CREATED,
       },
     });
 
@@ -33,7 +33,7 @@ export class TransactionService {
   async reproveTransaction(transactionId: string) {
     const updateTransaction = await this.prismaService.transaction.update({
       where: { id: transactionId },
-      data: { status: Status.REPROVED },
+      data: { status: TransactionStatus.REPROVED },
     });
   }
 }

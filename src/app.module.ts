@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { MessagingModule } from './messaging/mesaging.module';
+import { AmqpModule } from './messaging/mesaging.module';
 import { FraudModule } from './modules/fraud/fraud.module';
 import { TransactionModule } from './modules/transactions/transaction.module';
 import { UserModule } from './modules/user/user.module';
 
 @Module({
-  imports: [UserModule, TransactionModule, FraudModule, MessagingModule],
+  imports: [UserModule, TransactionModule, FraudModule, AmqpModule.register()],
 })
 export class AppModule {}

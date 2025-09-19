@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { Subscribe } from '../../../common/decorators/subscribe.decorator';
 import { TransactionService } from '../transaction.service';
 
 @Injectable()
 export class TransactionConsumer {
   constructor(private readonly transactionService: TransactionService) {}
-  @DLXSubscribe({
+  @Subscribe({
     exchange: 'fraud',
     routingKey: 'transaction.approved',
     queue: 'fraud.approved',
@@ -13,7 +14,7 @@ export class TransactionConsumer {
     console.log('Aprovado');
   }
 
-  @DLXSubscribe({
+  @Subscribe({
     exchange: 'fraud',
     routingKey: 'transaction.reproved',
     queue: 'fraud.reproved',
