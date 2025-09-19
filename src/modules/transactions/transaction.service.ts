@@ -29,4 +29,11 @@ export class TransactionService {
 
     return { id: transaction.id };
   }
+
+  async reproveTransaction(transactionId: string) {
+    const updateTransaction = await this.prismaService.transaction.update({
+      where: { id: transactionId },
+      data: { status: Status.PAID },
+    });
+  }
 }

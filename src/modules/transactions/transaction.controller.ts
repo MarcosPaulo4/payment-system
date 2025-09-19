@@ -4,7 +4,7 @@ import { CreateTransactionDTO } from './dto/create-transaction.dto';
 import { TransactionDTO } from './dto/transaction.dto';
 import { TransactionService } from './transaction.service';
 
-@Controller()
+@Controller('transaction')
 export class TransactionController {
   constructor(private readonly transactionService: TransactionService) {}
 

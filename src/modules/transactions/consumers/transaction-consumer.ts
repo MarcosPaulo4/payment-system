@@ -1,23 +1,33 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
-import { RabbitMQService } from '../../../common/messaging/rabbitmq.service';
+import { Injectable } from '@nestjs/common';
+import { DLXSubscribe } from '../../../common/decorators/dlx-subscribe';
+import { TransactionService } from '../transaction.service';
 
 @Injectable()
-export class FraudConsumer implements OnModuleInit {
-  private readonly routingKeyApproved = 'transaction.approved';
-  private readonly queueApproved = 'fraud.approved';
-  private readonly queueReproved = 'fraud.reproved';
-  private readonly routingKeyReproved = 'transaction.reproved';
-  private readonly transactionDlxQueue = 'transactions.dlx.queue';
-  private readonly fraudExchange = 'fraud';
-
-  constructor(private readonly rabbitMq: RabbitMQService) {}
-
-  onModuleInit() {
-    this.rabbitMq.subscribe(this.queueApproved, this.handleApproved.bind(this));
-    this.rabbitMq.subscribe(this.queueReproved, this.handleReproved.bind(this));
+export class TransactionConsumer {
+  constructor(private readonly transactionService: TransactionService) {}
+  @DLXSubscribe({
+    exchange: 'fraud',
+    routingKey: 'transaction.approved',
+    queue: 'fraud.approved',
+  })
+  async handleApproved(msg: any) {
+    console.log('Aprovado');
   }
 
-  async handleApproved(msg: any) {}
-
-  async handleReproved() {}
+  @DLXSubscribe({
+    exchange: 'fraud',
+    routingKey: 'transaction.reproved',
+    queue: 'fraud.reproved',
+  })
+  async handleReproved(msg: any) {
+    const { transactionId } = msg;
+    try {
+      await this.transactionService.reproveTransaction(transactionId);
+    } catch (error) {
+      console.error(
+        `Error handling reproved transaction with id: ${transactionId}`,
+        error,
+      );
+    }
+  }
 }
