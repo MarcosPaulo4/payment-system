@@ -33,7 +33,7 @@ export class TransactionService {
   async reproveTransaction(transactionId: string) {
     const updateTransaction = await this.prismaService.transaction.update({
       where: { id: transactionId },
-      data: { status: Status.PAID },
+      data: { status: Status.REPROVED },
     });
   }
 }

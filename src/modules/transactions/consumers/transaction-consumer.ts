@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { DLXSubscribe } from '../../../common/decorators/dlx-subscribe';
 import { TransactionService } from '../transaction.service';
 
 @Injectable()

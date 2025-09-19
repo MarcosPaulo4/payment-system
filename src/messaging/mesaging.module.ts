@@ -1,18 +1,20 @@
-import {
-  RabbitMQModule as GoRabbitModule,
-  RabbitMQModule,
-} from '@golevelup/nestjs-rabbitmq';
-import { Module } from '@nestjs/common';
-import { rabbitConfig } from '../config/rabbit.config';
+import { DynamicModule, Module } from '@nestjs/common';
+import { amqpConfig } from '../config/amqp/amqp.config';
+import { AmqpService } from './amqp.service';
 
-@Module({
-  imports: [
-    GoRabbitModule.forRoot({
-      uri: process.env.RABBITMQ_URL,
-      exchanges: rabbitConfig.exchanges,
-      connectionInitOptions: { wait: true },
-    }),
-  ],
-  exports: [RabbitMQModule],
-})
-export class MessagingModule {}
+@Module({})
+export class AmqpModule {
+  static register(): DynamicModule {
+    return {
+      module: AmqpModule,
+      providers: [
+        {
+          provide: 'AMQP_CONFIG',
+          useValue: amqpConfig,
+        },
+        AmqpService,
+      ],
+      exports: [AmqpService],
+    };
+  }
+}

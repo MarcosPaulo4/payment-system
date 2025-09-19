@@ -410,23 +410,6 @@
     "@eslint/core" "^0.15.2"
     levn "^0.4.1"
 
-"@golevelup/nestjs-discovery@^5.0.0":
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/@golevelup/nestjs-discovery/-/nestjs-discovery-5.0.0.tgz#f1b8ba821fc3256fb74f9bced6f5526eeb0772a5"
-  integrity sha512-NaIWLCLI+XvneUK05LH2idHLmLNITYT88YnpOuUQmllKtiJNIS3woSt7QXrMZ5k3qUWuZpehEVz1JtlX4I1KyA==
-  dependencies:
-    lodash "^4.17.21"
-
-"@golevelup/nestjs-rabbitmq@^6.0.2":
-  version "6.0.2"
-  resolved "https://registry.yarnpkg.com/@golevelup/nestjs-rabbitmq/-/nestjs-rabbitmq-6.0.2.tgz#c71404e94398d0d604385be4aca832a14896a218"
-  integrity sha512-LZRLdi54U78/Y/6hNqChWQDpITmGSk7GRZm83e/85GIiNv2ewIPXZdLjgZfBrnzzSlwoiTx78LvLs+WdoSuBNQ==
-  dependencies:
-    "@golevelup/nestjs-discovery" "^5.0.0"
-    amqp-connection-manager "^4.1.14"
-    amqplib "^0.10.7"
-    lodash "^4.17.21"
-
 "@humanfs/core@^0.19.1":
   version "0.19.1"
   resolved "https://registry.yarnpkg.com/@humanfs/core/-/core-0.19.1.tgz#17c55ca7d426733fe3c561906b8173c336b40a77"
@@ -1865,14 +1848,7 @@ ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-amqp-connection-manager@^4.1.14:
-  version "4.1.14"
-  resolved "https://registry.yarnpkg.com/amqp-connection-manager/-/amqp-connection-manager-4.1.14.tgz#603d20ffbc6d90fe464c2a08600c7644c9475342"
-  integrity sha512-1km47dIvEr0HhMUazqovSvNwIlSvDX2APdUpULaINtHpiki1O+cLRaTeXb/jav4OLtH+k6GBXx5gsKOT9kcGKQ==
-  dependencies:
-    promise-breaker "^6.0.0"
-
-amqplib@^0.10.7:
+amqplib@^0.10.9:
   version "0.10.9"
   resolved "https://registry.yarnpkg.com/amqplib/-/amqplib-0.10.9.tgz#5b744c21d624f9307d0399e4d339b7354675831c"
   integrity sha512-jwSftI4QjS3mizvnSnOrPGYiUnm1vI2OP1iXeOUz5pb74Ua0nbf6nPyyTzuiCLEE3fMpaJORXh2K/TQ08H5xGA==
@@ -4500,11 +4476,6 @@ prisma@^6.16.1:
   dependencies:
     "@prisma/config" "6.16.2"
     "@prisma/engines" "6.16.2"
-
-promise-breaker@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/promise-breaker/-/promise-breaker-6.0.0.tgz#107d2b70f161236abdb4ac5a736c7eb8df489d0f"
-  integrity sha512-BthzO9yTPswGf7etOBiHCVuugs2N01/Q/94dIPls48z2zCmrnDptUUZzfIb+41xq0MnYZ/BzmOd6ikDR4ibNZA==
 
 proxy-addr@^2.0.7:
   version "2.0.7"

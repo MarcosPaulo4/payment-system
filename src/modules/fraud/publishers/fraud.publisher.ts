@@ -1,28 +1,20 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
+import { AmqpService } from '../../../messaging/amqp.service';
 
 @Injectable()
 export class FraudPub {
   private readonly fraudExchange = 'fraud';
-  constructor(private readonly amqpConnection: AmqpConnection) {}
+  constructor(private readonly amqpService: AmqpService) {}
 
   async approveTransaction(transactionId: string) {
-    await this.amqpConnection.publish(
-      this.fraudExchange,
-      'transaction.approved',
-      {
-        transactionId,
-      },
-    );
+    await this.amqpService.publish(this.fraudExchange, 'transaction.approved', {
+      transactionId,
+    });
   }
 
   async reproveTransaction(transactionId: string) {
-    await this.amqpConnection.publish(
-      this.fraudExchange,
-      'transaction.reproved',
-      {
-        transactionId,
-      },
-    );
+    await this.amqpService.publish(this.fraudExchange, 'transaction.reproved', {
+      transactionId,
+    });
   }
 }

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { DLXSubscribe } from '../../../common/decorators/dlx-subscribe';
+import { Subscribe } from '../../../common/decorators/subscribe.decorator';
 import { FraudPub } from '../publishers/fraud.publisher';
 
 @Injectable()
 export class FraudConsumer {
   constructor(private readonly fraudPub: FraudPub) {}
 
-  @DLXSubscribe({
+  @Subscribe({
     exchange: 'transactions',
     routingKey: 'transaction.created',
     queue: 'fraud.check',
