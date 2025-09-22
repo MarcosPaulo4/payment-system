@@ -13,22 +13,13 @@ import {
 
 @Injectable()
 export class AmqpService implements OnModuleInit, OnModuleDestroy {
-  private connection: amqp.Connection;
-  private channel: amqp.Channel;
-
   constructor(
-    @Inject('AMQP_EXCHANGES') private exchanges: any[],
+    @Inject('AMQP_CHANNEL') private channel: amqp.Channel,
+    @Inject('AMQP_CONNECTION') private connection: amqp.Connection,
     private moduleRef: ModuleRef,
   ) {}
 
   async onModuleInit() {
-    this.connection = await amqp.connect(process.env.RABBITMQ_URL);
-    this.channel = await this.connection.createChannel();
-
-    for (const ex of this.exchanges) {
-      await this.channel.assertExchange(ex.name, ex.type, { durable: true });
-    }
-
     const modules = this.moduleRef['container'].getModules().values();
     for (const module of modules) {
       for (const wrapper of module.providers.values()) {
@@ -50,7 +41,10 @@ export class AmqpService implements OnModuleInit, OnModuleDestroy {
     options: SubscribeOptions,
     methodName: string | symbol,
   ) {
-    await this.channel.assertQueue(options.queue, { durable: true });
+    await this.channel.assertQueue(
+      options.queue,
+      options.queueOptions ?? { durable: true },
+    );
     await this.channel.bindQueue(
       options.queue,
       options.exchange,
