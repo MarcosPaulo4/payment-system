@@ -5,11 +5,15 @@ import {
 } from '@nestjs/common';
 import { User } from '../../../generated/prisma';
 import { PrismaService } from '../../database/prisma.service';
+import { StripeService } from '../stripe/stripe.service';
 import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly stripeService: StripeService,
+  ) {}
 
   async create(dto: CreateUserDto): Promise<Partial<User>> {
     try {
@@ -19,6 +23,11 @@ export class UserService {
       }
       const createUser = await this.prisma.user.create({
         data: dto,
+      });
+
+      await this.stripeService.createCustomer({
+        email: createUser.email,
+        name: createUser.name,
       });
 
       return { id: createUser.id };

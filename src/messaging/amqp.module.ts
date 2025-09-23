@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Global, Module } from '@nestjs/common';
 import * as amqp from 'amqplib';
 import { AmqpService } from './amqp.service';
 
@@ -6,29 +6,39 @@ export interface AmqpModuleOptions {
   url: string;
   exchanges: { name: string; type: string }[];
 }
-
+@Global()
 @Module({})
 export class AmqpModule {
-  static registerAsync(options: AmqpModuleOptions): DynamicModule {
+  static registerAsync(options: {
+    imports?: any[];
+    inject?: any[];
+    useFactory: (
+      ...args: any[]
+    ) => AmqpModuleOptions | Promise<AmqpModuleOptions>;
+  }): DynamicModule {
     return {
       module: AmqpModule,
+      imports: options.imports || [],
       providers: [
         {
           provide: 'AMQP_OPTIONS',
-          useValue: options,
+          useFactory: options.useFactory,
+          inject: options.inject || [],
         },
         {
           provide: 'AMQP_CONNECTION',
-          useFactory: async () => {
-            return await amqp.connect(options.url);
-          },
+          useFactory: async (opts: AmqpModuleOptions) => amqp.connect(opts.url),
+          inject: ['AMQP_OPTIONS'],
         },
         {
           provide: 'AMQP_CHANNEL',
-          useFactory: async (connection: amqp.Connection) => {
+          useFactory: async (
+            connection: amqp.Connection,
+            opts: AmqpModuleOptions,
+          ) => {
             const channel = await connection.createChannel();
-            if (options.exchanges) {
-              for (const ex of options.exchanges) {
+            if (opts.exchanges) {
+              for (const ex of opts.exchanges) {
                 await channel.assertExchange(ex.name, ex.type, {
                   durable: true,
                 });
@@ -36,7 +46,7 @@ export class AmqpModule {
             }
             return channel;
           },
-          inject: ['AMQP_CONNECTION'],
+          inject: ['AMQP_CONNECTION', 'AMQP_OPTIONS'],
         },
         AmqpService,
       ],

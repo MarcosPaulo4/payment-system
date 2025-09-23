@@ -25,13 +25,48 @@ export class TransactionService {
       transaction.id,
       transaction.userId,
       transaction.amount,
+      transaction.userEmail,
     );
 
     return { id: transaction.id };
   }
 
+  async approveTransaction(
+    transactionId: string,
+    userId: string,
+    userEmail: string,
+  ) {
+    const tx = await this.prismaService.transaction.findUnique({
+      where: { id: transactionId },
+    });
+    if (!tx) {
+      throw new Error('Transaction not found');
+    }
+    if (tx?.status === TransactionStatus.SEND) {
+      return tx;
+    }
+    await this.prismaService.transaction.update({
+      where: { id: transactionId },
+      data: { status: TransactionStatus.SEND },
+    });
+    return await this.transactionPub.createTransactionSession(
+      transactionId,
+      userId,
+      userEmail,
+    );
+  }
+
   async reproveTransaction(transactionId: string) {
-    const updateTransaction = await this.prismaService.transaction.update({
+    const tx = await this.prismaService.transaction.findUnique({
+      where: { id: transactionId },
+    });
+    if (!tx) {
+      throw new Error('Transaction not found');
+    }
+    if (tx?.status === TransactionStatus.REPROVED) {
+      return tx;
+    }
+    return await this.prismaService.transaction.update({
       where: { id: transactionId },
       data: { status: TransactionStatus.REPROVED },
     });

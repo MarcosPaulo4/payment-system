@@ -7,15 +7,6 @@ export class TransactionConsumer {
   constructor(private readonly transactionService: TransactionService) {}
   @Subscribe({
     exchange: 'fraud',
-    routingKey: 'transaction.approved',
-    queue: 'fraud.approved',
-  })
-  async handleApproved(msg: any) {
-    console.log('Aprovado');
-  }
-
-  @Subscribe({
-    exchange: 'fraud',
     routingKey: 'transaction.reproved',
     queue: 'fraud.reproved',
   })
@@ -26,6 +17,27 @@ export class TransactionConsumer {
     } catch (error) {
       console.error(
         `Error handling reproved transaction with id: ${transactionId}`,
+        error,
+      );
+    }
+  }
+
+  @Subscribe({
+    exchange: 'fraud',
+    routingKey: 'transaction.approved',
+    queue: 'fraud.approved',
+  })
+  async handleApproved(msg: any) {
+    const { transactionId, userId, userEmail } = msg;
+    try {
+      await this.transactionService.approveTransaction(
+        transactionId,
+        userId,
+        userEmail,
+      );
+    } catch (error) {
+      console.error(
+        `Error handling approved transaction with id: ${transactionId}`,
         error,
       );
     }

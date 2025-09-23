@@ -6,7 +6,7 @@ import { FraudService } from './fraud.service';
 import { FraudPub } from './publishers/fraud.publisher';
 
 @Module({
-  imports: [DatabaseModule, AmqpModule.register()],
+  imports: [DatabaseModule, AmqpModule],
   providers: [FraudConsumer, FraudService, FraudPub],
 })
 export class FraudModule {}

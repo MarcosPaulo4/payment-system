@@ -11,7 +11,7 @@ export class UserController {
   @Post()
   @ApiOperation({
     summary: 'Create an user',
-    description: 'This endpoint creates an user.',
+    description: 'This endpoint creates an user in the database and in stripe.',
   })
   @ApiCreatedResponse({
     description: 'Details of the created user',

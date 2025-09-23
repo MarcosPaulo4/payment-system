@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { amqpConfig } from './config/amqp/amqp.config';
 import { AmqpModule } from './messaging/amqp.module';
 import { FraudModule } from './modules/fraud/fraud.module';
+import { PaymentModule } from './modules/payment/payment.module';
+import { StripeModule } from './modules/stripe/stripe.module';
 import { TransactionModule } from './modules/transactions/transaction.module';
 import { UserModule } from './modules/user/user.module';
 
@@ -10,15 +12,21 @@ import { UserModule } from './modules/user/user.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
     }),
     AmqpModule.registerAsync({
-      url: process.env.AMQP_URL || 'amqp://localhost:5672',
-      exchanges: amqpConfig.exchanges,
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        url:
+          configService.get<string>('RABBITMQ_URL') || 'amqp://localhost:5672',
+        exchanges: amqpConfig.exchanges,
+      }),
     }),
-
     UserModule,
     TransactionModule,
     FraudModule,
+    PaymentModule,
+    StripeModule,
   ],
 })
 export class AppModule {}

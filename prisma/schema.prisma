@@ -12,6 +12,7 @@ model User {
   id           String        @id @default(uuid())
   email        String        @unique
   name         String
+  status       UserStatus    @default(NOT_SIGNED)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   transactions Transaction[]
@@ -21,6 +22,7 @@ model Transaction {
   id        String   @id @default(uuid())
   user      User     @relation(fields: [userId], references: [id])
   userId    String
+  userEmail String  
   amount    Float
   status    TransactionStatus
   createdAt DateTime @default(now())
@@ -36,6 +38,11 @@ model Ledger {
   amount        Float
   createdAt     DateTime    @default(now())
   description   String
+}
+
+enum UserStatus {
+  SIGNED
+  NOT_SIGNED
 }
 
 enum Type {
