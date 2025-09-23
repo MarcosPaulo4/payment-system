@@ -1,4 +1,4 @@
-# Mini paymentSystem
+# Mini payment api 
 
 Projeto de exemplo para simular um sistema de pagamento , com **NestJS**, **Prisma**, **PostgreSQL** e **RabbitMQ**.  
 A ideia é registrar **movimentos financeiros** em uma conta e logar cada evento em uma fila do RabbitMQ.
