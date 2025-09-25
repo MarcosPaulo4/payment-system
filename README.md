@@ -1,7 +1,20 @@
 # Mini payment api 
 
-Projeto de exemplo para simular um sistema de pagamento , com **NestJS**, **Prisma**, **PostgreSQL** e **RabbitMQ**.  
-A ideia é registrar **movimentos financeiros** em uma conta e logar cada evento em uma fila do RabbitMQ.
+Projeto de exemplo para simular um sistema de pagamentos com NestJS, Prisma, PostgreSQL e RabbitMQ.
+
+O objetivo é explorar uma arquitetura orientada a eventos, utilizando apenas o protocolo AMQP, e enfrentar desafios reais em mensageria, como:
+
+ - Indempotência das mensagens
+
+ - O que fazer quando uma mensagem não é entregue
+
+ - Como lidar quando o servidor não responde ou demora a responder
+
+ - Configuração e uso de filas DLX e TTL
+
+ - Implementação de um sistema PUB/SUB
+
+Além disso, o projeto busca demonstrar na prática como estruturar a infraestrutura de mensageria e lidar diretamente com o broker (RabbitMQ), entendendo o fluxo e os problemas comuns nesse tipo de arquitetura.
 
 ---
 
@@ -9,7 +22,7 @@ A ideia é registrar **movimentos financeiros** em uma conta e logar cada evento
 
 - [NestJS](https://nestjs.com/) - Backend framework
 - [Prisma](https://www.prisma.io/) - ORM para banco PostgreSQL
-- [RabbitMQ](https://www.rabbitmq.com/) - Mensageria
+- [RabbitMQ](https://www.rabbitmq.com/) - Mensageria/Broker
 - [Docker](https://www.docker.com/) - Orquestração com Docker Compose
 
 ---
